@@ -89,7 +89,7 @@ public class Main extends Application implements EventHandler {
         vPrincipal = new VBox();
         vPrincipal.getChildren().addAll(mnbPrincipal,tlbMenu);
         escena = new Scene(vPrincipal);
-
+        escena.getStylesheets().add("assets/css/main_style.css");
     }
 
     private void opcionMenu(int opc) {

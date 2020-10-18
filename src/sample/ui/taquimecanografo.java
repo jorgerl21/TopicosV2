@@ -143,5 +143,6 @@ public class taquimecanografo extends Stage implements EventHandler <KeyEvent>
                     arBtnTeclado2[13].setStyle("-fx-background-color: #7a7a7a;");
                 break;
            }
+        banColor = !banColor;
     }
 }
