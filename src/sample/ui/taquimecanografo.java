@@ -27,7 +27,14 @@ public class taquimecanografo extends Stage implements EventHandler <KeyEvent>
     private String[] arlblbtn1 = {"ESC","f1","f2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12","imprpant"};
 
     private String[] arlblbtn2 = {"|","1","2","3","4","5","6","7","8","9","0","'","¿","back"};
-    //private String[] arlblbtn1 = {"ESC","f1","f2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12","imprpant"};
+
+    private String[] arlblbtn3 = {"TAB","Q","W","E","R","T","Y","I","I","O","P","´","+","}"};
+
+    private String[] arlblbtn4 = {"BLOQ-MAYUS","A","S","D","F","G","H","I","J","K","L","Ñ´","{","ENTER"};
+
+    private String[] arlblbtn5 = {"↑","↔","Z","X","C","V","B","N","M",",",".","-","↑"};
+
+    private String[] arlblbtn6 = {"CTRL","WIN","ALT","ESPACIO","ALTGr","OPC","CTRL"};
 
     //elementos para el toolbar
     private ToolBar tlbMenu;
@@ -41,6 +48,10 @@ public class taquimecanografo extends Stage implements EventHandler <KeyEvent>
     private VBox  vbTeclado;
     private Button[] arBtnTeclado1 = new Button[14];
     private Button[] arBtnTeclado2 = new Button[14];
+    private Button[] arBtnTeclado3 = new Button[13];
+    private Button[] arBtnTeclado4 = new Button[13];
+    private Button[] arBtnTeclado5 = new Button[13];
+    private Button[] arBtnTeclado6 = new Button[8];
 
 
     private FileChooser flcArchivos;
@@ -87,9 +98,13 @@ public class taquimecanografo extends Stage implements EventHandler <KeyEvent>
            {
             arBtnTeclado1[i] = new Button(arlblbtn1[i]);
             arBtnTeclado2[i] = new Button(arlblbtn2[i]);
+
             arHBTeclas[0].getChildren().add(arBtnTeclado1[i]);
             arHBTeclas[1].getChildren().add(arBtnTeclado2[i]);
            }
+
+
+
         vbTeclado.getChildren().addAll(arHBTeclas[0],arHBTeclas[1]);
     }
 
