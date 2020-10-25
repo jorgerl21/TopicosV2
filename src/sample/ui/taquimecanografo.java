@@ -24,17 +24,17 @@ public class taquimecanografo extends Stage implements EventHandler <KeyEvent>
     Boolean banColor = false;
     //arreglos para etiquetar los botones del teclado
 
-    private String[] arlblbtn1 = {"ESC","f1","f2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12","imprpant"};
+    private String[] arlblbtn1 = {"ESC","f1","f2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12"};
 
     private String[] arlblbtn2 = {"|","1","2","3","4","5","6","7","8","9","0","'","¿","back"};
 
     private String[] arlblbtn3 = {"TAB","Q","W","E","R","T","Y","I","I","O","P","´","+","}"};
 
-    private String[] arlblbtn4 = {"BLOQ-MAYUS","A","S","D","F","G","H","I","J","K","L","Ñ´","{","ENTER"};
+    private String[] arlblbtn4 = {"BM","A","S","D","F","G","H","I","J","K","L","Ñ","ENTER"};
 
     private String[] arlblbtn5 = {"↑","↔","Z","X","C","V","B","N","M",",",".","-","↑"};
 
-    private String[] arlblbtn6 = {"CTRL","WIN","ALT","ESPACIO","ALTGr","OPC","CTRL"};
+    private String[] arlblbtn6 = {"1","2","3","4","5","6","7"};
 
     //elementos para el toolbar
     private ToolBar tlbMenu;
@@ -46,12 +46,12 @@ public class taquimecanografo extends Stage implements EventHandler <KeyEvent>
     //elementos para el teclado
     private HBox[] arHBTeclas = new HBox[6];
     private VBox  vbTeclado;
-    private Button[] arBtnTeclado1 = new Button[14];
+    private Button[] arBtnTeclado1 = new Button[13];
     private Button[] arBtnTeclado2 = new Button[14];
-    private Button[] arBtnTeclado3 = new Button[13];
-    private Button[] arBtnTeclado4 = new Button[13];
+    private Button[] arBtnTeclado3 = new Button[14];
+    private Button[] arBtnTeclado4 = new Button[15];
     private Button[] arBtnTeclado5 = new Button[13];
-    private Button[] arBtnTeclado6 = new Button[8];
+    private Button[] arBtnTeclado6 = new Button[7];
 
 
     private FileChooser flcArchivos;
@@ -98,14 +98,29 @@ public class taquimecanografo extends Stage implements EventHandler <KeyEvent>
            {
             arBtnTeclado1[i] = new Button(arlblbtn1[i]);
             arBtnTeclado2[i] = new Button(arlblbtn2[i]);
+            arBtnTeclado3[i] = new Button(arlblbtn3[i]);
+            arBtnTeclado4[i] = new Button(arlblbtn4[i]);
+            arBtnTeclado5[i] = new Button(arlblbtn5[i]);
+            arBtnTeclado6[i] = new Button(arlblbtn6[i]);
+            //arBtnTeclado3[i] = new Button(arlblbtn4[i]);
+            //arBtnTeclado3[i] = new Button(arlblbtn5[i]);
+            //arBtnTeclado3[i] = new Button(arlblbtn6[i]);
 
             arHBTeclas[0].getChildren().add(arBtnTeclado1[i]);
             arHBTeclas[1].getChildren().add(arBtnTeclado2[i]);
+            arHBTeclas[2].getChildren().add(arBtnTeclado3[i]);
+            arHBTeclas[3].getChildren().add(arBtnTeclado4[i]);
+            arHBTeclas[4].getChildren().add(arBtnTeclado5[i]);
+            arHBTeclas[5].getChildren().add(arBtnTeclado6[i]);
+
+            //arHBTeclas[3].getChildren().add(arBtnTeclado4[i]);
+            //arHBTeclas[4].getChildren().add(arBtnTeclado5[i]);
+            //arHBTeclas[5].getChildren().add(arBtnTeclado6[i]);
            }
 
 
 
-        vbTeclado.getChildren().addAll(arHBTeclas[0],arHBTeclas[1]);
+        vbTeclado.getChildren().addAll(arHBTeclas[0],arHBTeclas[1],arHBTeclas[2],arHBTeclas[3],arHBTeclas[4],arHBTeclas[5]);
     }
 
     private void CrearEscritura()
