@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import sample.models.Conexion;
 import sample.ui.memorama;
 import sample.ui.taquimecanografo;
 
@@ -41,6 +42,8 @@ public class Main extends Application implements EventHandler {
         primaryStage.setScene(escena);
         primaryStage.addEventHandler(WindowEvent.WINDOW_SHOWING, this);
         primaryStage.show();
+
+        Conexion.crearConexion();
         
     }
 

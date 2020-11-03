@@ -1,215 +1,314 @@
+
 package sample.ui;
 
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
+import Events.EventoTeclado;
+
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
-
-public class taquimecanografo extends Stage implements EventHandler <KeyEvent>
-{
-
-    Boolean banColor = false;
-    //arreglos para etiquetar los botones del teclado
-
-    private String[] arlblbtn1 = {"ESC","f1","f2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12"};
-
-    private String[] arlblbtn2 = {"|","1","2","3","4","5","6","7","8","9","0","'","¿","BS"};
-
-    private String[] arlblbtn3 = {"TAB","Q","W","E","R","T","Y","I","I","O","P","´","+","}"};
-
-    private String[] arlblbtn4 = {"BM","A","S","D","F","G","H","I","J","K","L","Ñ","ENTER"};
-
-    private String[] arlblbtn5 = {"↑","↔","Z","X","C","V","B","N","M",",",".","-","↑"};
-
-    //private String[] arlblbtn6 = {"as","ad","af","ag","ah"};
-    private String[] arlblbtn6 = {"ctrl","alt","espace","altgr","ctrl","left","rigth"};
-
-    //elementos para el toolbar
-    private ToolBar tlbMenu;
-    private Button btnAbrir;
-
-    //elementos para laescritura
-    private TextArea txaContenido, txaEscritura;
-
-    //elementos para el teclado
-    private HBox[] arHBTeclas = new HBox[6];
-    private VBox  vbTeclado;
-    private Button[] arBtnTeclado1 = new Button[13];
-    private Button[] arBtnTeclado2 = new Button[14];
-    private Button[] arBtnTeclado3 = new Button[14];
-    private Button[] arBtnTeclado4 = new Button[13];
-    private Button[] arBtnTeclado5 = new Button[13];
-    private Button[] arBtnTeclado6 = new Button[7];
-    //private Button[] arBtnTeclado6 = new Button[7];
+import java.io.FileInputStream;
+import java.util.TimerTask;
+import java.util.Timer;
 
 
-    private FileChooser flcArchivos;
+public class taquimecanografo extends Stage{
 
-    //elementos de agrupacio gloobal
-    private VBox vboxPrincipal;
     private Scene escena;
+    private VBox vbox;
+    private ToolBar tlbMenu;
+    private TextArea txtTexto, txtescritura;
+    public HBox[] filas;
+    public VBox vTeclado;
+    private Button btnAbrir, btnFinal;
+    private FileChooser flcArchivo;
+    public FileInputStream entrada;
+    private Label lblEr, lblCont;
+    private TextField txtConta, txtEr;
+    private     Timer timer = new Timer();
+    Icon iconT, iconF;
 
 
-    public taquimecanografo()
-    {
+    private Button[] arTFunciones;
+    private Button[] arTNumeros;
+    private Button[] arTTabulador;
+    private Button[] arTMayus;
+    private Button[] arTShift;
+    private Button[] arTEspacio;
 
-        CrearUI();
-
-        this.setTitle("tutor de mecanografia");
+    public taquimecanografo(){
+        CrearGui();
+        this.setTitle("Taquimecanografo");
         this.setScene(escena);
+        this.setMaximized(true);
+        //escena.getStylesheets().add(getClass().getResource("../CSS/taqui.css").toExternalForm());
         this.show();
+
     }
 
-    private void CrearUI()
-    {
-        CrearToolbar();
-        CrearEscritura();
+    private void CrearGui() {
+
+        //ImageView img = new ImageView("src/Images/finaliza.png");
+        ImageView img = new ImageView("assets/finaliza.png");
+        img.setFitWidth(50);
+        img.setFitHeight(50);
+
+        vbox = new VBox();
+
+        /* crear toolbar*/
+
+        tlbMenu = new ToolBar();
+
+        btnAbrir = new Button();
+        btnAbrir.setOnContextMenuRequested(event -> BuscarArchivo());
+        btnAbrir.setGraphic(new ImageView("assets/open.png"));
+
+
+        lblEr = new Label(" Errores: ");
+        txtEr = new TextField("0");
+        txtEr.setEditable(false);
+
+        lblCont = new Label(" Tiempo: ");
+        txtConta = new TextField("000");
+        txtConta.setEditable(false);
+
+
+
+
+        btnFinal = new Button("Finalizar");
+        btnFinal.setOnAction(MouseEvent -> btnFinalizar());
+        btnFinal.setGraphic(img);
+
+        tlbMenu.getItems().addAll(btnAbrir, lblEr, txtEr, lblCont, txtConta, btnFinal);
+
+        //////////////////
+
+        /* Caja de texto*/
+
+        txtTexto = new TextArea();
+        txtTexto.setPrefColumnCount(100);//Columnas que se visializan (hay que revisar)
+        txtTexto.setPrefRowCount(5);//renglos que se visualizan
+        txtTexto.setEditable(false);
+
+        //////////////////
+
+
+        ////////////////////////////////
+
+        /* Creamos la seccion del teclado*/
+
         CrearTeclado();
 
-        vboxPrincipal = new VBox();
-        vboxPrincipal.getChildren().addAll(tlbMenu, txaContenido,txaEscritura,vbTeclado);
-        vboxPrincipal.setSpacing(10);
-        vboxPrincipal.setPadding(new Insets(10));
-        escena = new Scene(vboxPrincipal, 800,500);
+        ////////////////////
+
+        /* Caja de texto para capturar*/
+        int a=0;
+        txtescritura = new TextArea();
+        txtescritura.setPrefRowCount(5);
+        txtescritura.addEventHandler(KeyEvent.KEY_PRESSED, new EventoTeclado(this,1 ));//se asigna el evento que se realizara
+        txtescritura.addEventHandler(KeyEvent.KEY_RELEASED, new EventoTeclado(this,0 ));
+
+
+        vbox.getChildren().addAll(tlbMenu,txtTexto, txtescritura,vTeclado);
+
+        escena = new Scene(vbox,400,500);
+
     }
 
-    private void CrearTeclado()
-    {
-        vbTeclado = new VBox();
-        vbTeclado.setSpacing(8);
+    private void BuscarArchivo() {
 
-        for (int i = 0; i < arHBTeclas.length; i++)
-        {
-            arHBTeclas[i] = new HBox();
-            arHBTeclas[i].setSpacing(10);
+
+        flcArchivo = new FileChooser();
+        flcArchivo.setTitle("Buscar archivo");
+        FileChooser.ExtensionFilter filtro = new FileChooser.ExtensionFilter("Archivos TXT (*.txt)", "*.txt");
+        flcArchivo.getExtensionFilters().add(filtro);
+        File archivo =  flcArchivo.showOpenDialog(this);
+
+
+        if(archivo != null){
+
+
+            if(archivo.canRead()){
+
+                if(archivo.getName().endsWith("txt")){
+
+                    String doc = openFile(archivo);
+                    txtTexto.setText(doc);
+
+                }
+
+            }
+
         }
 
-        for (int i = 0; i < arBtnTeclado1.length; i++)
-        {
-            arBtnTeclado1[i] = new Button(arlblbtn1[i]);
-            arBtnTeclado1[i].setStyle("-fx-background-color: #85D4D6;");
-            arHBTeclas[0].getChildren().add(arBtnTeclado1[i]);
-            //arBtnTeclado2[i] = new Button(arlblbtn2[i]);
-            //arBtnTeclado2[i].setStyle("-fx-background-color: #85D4D6;");
-            //arBtnTeclado3[i] = new Button(arlblbtn3[i]);
-            //arBtnTeclado4[i] = new Button(arlblbtn4[i]);
-            //arBtnTeclado5[i] = new Button(arlblbtn5[i]);
+        metTimer();
 
-            //arBtnTeclado6[i] = new Button(arlblbtn6[i]);
-
-            //arBtnTeclado6[i] = new Button(arlblbtn6[i]);
-            //arBtnTeclado3[i] = new Button(arlblbtn4[i]);
-            //arBtnTeclado3[i] = new Button(arlblbtn5[i]);
-            //arBtnTeclado3[i] = new Button(arlblbtn6[i]);
-
-            //arHBTeclas[0].getChildren().add(arBtnTeclado1[i]);
-            //arHBTeclas[1].getChildren().add(arBtnTeclado2[i]);
-            //arHBTeclas[2].getChildren().add(arBtnTeclado3[i]);
-            //arHBTeclas[3].getChildren().add(arBtnTeclado4[i]);
-            //arHBTeclas[4].getChildren().add(arBtnTeclado5[i]);
-
-            //arHBTeclas[5].getChildren().add(arBtnTeclado6[i]);
-
-            //arHBTeclas[5].getChildren().add(arBtnTeclado6[i]);
-
-            //arHBTeclas[3].getChildren().add(arBtnTeclado4[i]);
-            //arHBTeclas[4].getChildren().add(arBtnTeclado5[i]);
-            //arHBTeclas[5].getChildren().add(arBtnTeclado6[i]);
-        }
-        for (int i = 0; i < arBtnTeclado2.length; i++) {
-            arBtnTeclado2[i] = new Button(arlblbtn2[i]);
-            arBtnTeclado2[i].setStyle("-fx-background-color: #85D4D6;");
-            arHBTeclas[1].getChildren().add(arBtnTeclado2[i]);
-        }
-        for (int i = 0; i < arBtnTeclado3.length; i++) {
-            arBtnTeclado3[i] = new Button(arlblbtn3[i]);
-            arBtnTeclado3[i].setStyle("-fx-background-color: #85D4D6;");
-            arHBTeclas[2].getChildren().add(arBtnTeclado3[i]);
-        }
-        for (int i = 0; i < arBtnTeclado4.length; i++) {
-            arBtnTeclado4[i] = new Button(arlblbtn4[i]);
-            arBtnTeclado4[i].setStyle("-fx-background-color: #85D4D6;");
-            arHBTeclas[3].getChildren().add(arBtnTeclado4[i]);
-        }
-        for (int i = 0; i < arBtnTeclado5.length; i++) {
-            arBtnTeclado5[i] = new Button(arlblbtn5[i]);
-            arBtnTeclado5[i].setStyle("-fx-background-color: #85D4D6;");
-            arHBTeclas[4].getChildren().add(arBtnTeclado5[i]);
-        }
-        for (int i = 0; i < arBtnTeclado6.length; i++) {
-            arBtnTeclado6[i] = new Button(arlblbtn6[i]);
-            arBtnTeclado6[i].setStyle("-fx-background-color: #85D4D6;");
-            arHBTeclas[5].getChildren().add(arBtnTeclado6[i]);
-        }
+        System.out.println("hola");
 
 
-
-        vbTeclado.getChildren().addAll(arHBTeclas[0],arHBTeclas[1],arHBTeclas[2],arHBTeclas[3],arHBTeclas[4],arHBTeclas[5]);
     }
 
-    private void CrearEscritura()
-    {
-        txaContenido = new TextArea();
-        txaContenido.setEditable(false);
-        txaContenido.setPrefRowCount(6);
-        txaEscritura = new TextArea();
-        txaEscritura.setPrefRowCount(6);
-        txaEscritura.setOnKeyPressed(this);
-        txaEscritura.setOnKeyReleased(this);
-        //addEventHandler(KeyEvent.KEY_TYPED, this);
-    }
+    private String openFile(File archivo) {
 
-    private void CrearToolbar()
-    {
-        tlbMenu = new ToolBar();
-        btnAbrir = new Button();
-        btnAbrir.setOnAction(actionEvent -> eventoTaqui(1));
-        btnAbrir.setPrefSize(64,64);
 
-        Image img = new Image("assets/keyboard.png");
-        ImageView imv = new ImageView(img);
-        imv.setFitHeight(64);
-        imv.setPreserveRatio(true);
-        btnAbrir.setGraphic(imv);
-        tlbMenu.getItems().addAll(btnAbrir);
-    }
 
-    private void eventoTaqui( int opc)
-    {
-        switch (opc)
-        {
-            case 1:
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("abrir archivo");
-                File file =  fileChooser.showOpenDialog(this);
+        String doc = "";
+        try{
+            entrada = new FileInputStream(archivo);
+            int ascci;
+            while((ascci = entrada.read()) != -1){
+                char caracter = (char) ascci;
+                doc += caracter;
+            }
+        }catch (Exception e){
+
         }
+
+        return doc;
+
     }
 
-    @Override
-    public void handle(KeyEvent event)
-    {
-        switch (event.getCode().toString())
-        {
-            case "BACK_SPACE":
-                if (banColor == false)
-                    arBtnTeclado2[14].setStyle("-fx-background-color: #1d1d1d;");
-                else
-                    arBtnTeclado2[14].setStyle("-fx-background-color: #85D4D6;");
-                break;
-        }
-        banColor = !banColor;
+    public void  metTimer(){
+
+
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+
+
+                TimerTask tarea = new TimerTask() {
+
+                    int cont = 0;
+                    @Override
+                    public void run() {
+
+                        txtConta.setText(String.valueOf(cont));
+                        System.out.println("Cuento: "+cont);
+                        cont++;
+
+                    }
+                };
+
+
+                timer.schedule(tarea, 0, 1000);
+
+            }
+        });
+
+
+
     }
+
+    public void btnFinalizar(){
+
+        iconF = new ImageIcon("assets/Doh.jpg");
+        iconT = new ImageIcon("assets/termineH.gif");
+        ((ImageIcon) iconT).getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
+        int error=0;
+
+
+        if((txtTexto.getText().equals(txtescritura.getText())) == true) {
+
+
+            timer.cancel();
+            JOptionPane.showMessageDialog(null,""," ¡¡YUUJUUU!! ",JOptionPane.WARNING_MESSAGE,iconT);
+            //txtescritura.setText(null);
+            //txtTexto.setText(null);
+
+
+        }else{
+
+
+            for (int i = 0; i < txtTexto.getText().length(); i++) {
+
+                if (txtTexto.getText().charAt(i) != txtescritura.getText().charAt(i)) {
+
+                    error++;
+
+                }
+
+            }
+
+
+            System.out.println("Error: "+error);
+
+            timer.cancel();
+            txtEr.setText(String.valueOf(error));
+            JOptionPane.showMessageDialog(null,"Errores: "+error, "¡Noooo!", JOptionPane.OK_OPTION,iconF);
+
+        }
+
+
+    }
+
+
+    private void CrearTeclado() {//metodo generico para todas las filas
+
+        String [] tecla = {"Esc","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","<-"};//etiqueta para todos los nombres
+        String [] tecla2 = {"1","2","3","4","5","6","7","8","9","0","'","¿"};//etiqueta para todos los nombres
+        String [] tecla3 = {"Q","W","E","R","T","Y","U","I","O","P","´","+"};//etiqueta para todos los nombres
+        String [] tecla4 = {"Mayús","A","S","D","F","G","H","J","K","L","Ñ","{","}","Enter"};//etiqueta para todos los nombres
+        String [] tecla5 = {"<","Z","X","C","V","B","N","M",",",".","-"};//etiqueta para todos los nombres
+        String [] tecla6 = {" "};//etiqueta para todos los nombres
+
+        filas = new HBox[6];
+        vTeclado = new VBox();
+        for (int i = 0; i < 6; i++){
+            filas[i] = new HBox();
+            vTeclado.getChildren().add(filas[i]);
+        }
+
+        /////Es para pintar las teclas////
+        CrearFila(tecla,arTFunciones,filas[0]);
+        CrearFila(tecla2,arTNumeros,filas[1]);
+        CrearFila(tecla3,arTTabulador,filas[2]);
+        CrearFila(tecla4,arTMayus,filas[3]);
+        CrearFila(tecla5,arTShift,filas[4]);
+        CrearFila(tecla6,arTEspacio,filas[5]);
+        /////////////////////////
+
+        /*String [] tecla = {"esc","F1","F2","f3","f4","f5","f6","f7","f8","f9","f10","f11","f12","sup"};//etiqueta para todos los nombres
+
+        arTFunciones = new Button[14];//se declara el arreglo de btns
+        for (int i=0; i < 14; i++){
+
+            arTFunciones[i] = new Button(tecla[i]);//se crea el boton
+            filas[0].getChildren().add(arTFunciones[i]);//para asignar el espacio
+
+        }*/
+
+    }
+
+    private void CrearFila(String[] tecla, Button[] arBotones, HBox hFilas){
+
+        arBotones = new Button[tecla.length];
+        for (int i = 0; i < tecla.length; i++){
+
+            arBotones[i] = new Button(tecla[i]);
+            arBotones[i].setId(tecla[i]);
+            arBotones[i].setPrefSize(230,50);
+            arBotones[i].setStyle("-fx-base: #333333");
+            hFilas.getChildren().add(arBotones[i]);
+
+        }
+
+    }
+
 }
+
