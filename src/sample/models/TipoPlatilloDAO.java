@@ -1,5 +1,9 @@
 package sample.models;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class TipoPlatilloDAO {
@@ -14,10 +18,10 @@ public class TipoPlatilloDAO {
 
     public void insTipo(){
         try{
-            String query = "INSERT INTO tbl_tipoplatillo (desc_tipo) VALUES ('"+desc_tipo+"')";
+            String query = "INSERT INTO tbl_tipoplatillo (desc_tipo) VALUES('"+desc_tipo+"')";
             Statement stmt = Conexion.con.createStatement();
             stmt.executeUpdate(query);
-        }catch (Exception e){
+        }catch(Exception e){
             e.printStackTrace();
         }
     }
@@ -39,6 +43,28 @@ public class TipoPlatilloDAO {
             e.printStackTrace();
         }
     }
-    public void getAllTipo(){}
+    public ObservableList<TipoPlatilloDAO> getAllTipo(){
+        ObservableList<TipoPlatilloDAO> listaTilpo = FXCollections.observableArrayList();
+        try{
+            TipoPlatilloDAO tipoP;
+            String query = "select * from tbl_tipoplatillo order by desc_tipo";
+            Statement stmt = Conexion.con.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while  (res.next()){
+                tipoP = new TipoPlatilloDAO();
+                tipoP.setId_tipo(res.getInt("id_tipo"));
+                tipoP.setDesc_tipo(res.getString("desc_tipo"));
+                listaTilpo.add(tipoP);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return listaTilpo;
+    }
     public void getTipo(){}
+
+    @Override
+    public String toString() {
+        return desc_tipo;
+    }
 }

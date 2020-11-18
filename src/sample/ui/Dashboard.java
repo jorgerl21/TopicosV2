@@ -1,14 +1,21 @@
 package sample.ui;
 
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import sample.models.PlatillosDAO;
 
-public class restaurante extends Stage {
+public class Dashboard extends Stage {
+
+    private TableView<PlatillosDAO> id_platillo;
 
 
-    public restaurante() {
+
+    public Dashboard() {
         CrearUI();
-        this.setTitle("restaurante :)");
+        this.setTitle("panel de administracion del restaurante el antojito");
         this.show();
+
+        new platilloCRUD();
     }
 
     private void CrearUI() {
@@ -16,6 +23,8 @@ public class restaurante extends Stage {
     }
 
 }
+
+
 /*java una clase es una tabla de una base de datos
 * un objeto en java es u registro en  una db
 * */

@@ -3,19 +3,17 @@ package sample;
 import javafx.application.Application;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import sample.models.Conexion;
+import sample.ui.Dashboard;
 import sample.ui.memorama;
+import sample.ui.Dashboard;
 import sample.ui.taquimecanografo;
 
 public class Main extends Application implements EventHandler {
@@ -25,7 +23,7 @@ public class Main extends Application implements EventHandler {
 
     private MenuBar mnbPrincipal;
     private Menu menCompetencia1, menCompetencia2, menSalir;
-    private MenuItem itmMemrama, itmTerminar;
+    private MenuItem itmMemrama, itmRestaurante, itmTerminar;
     private Scene escena;
 
     private ToolBar tlbMenu;
@@ -65,10 +63,15 @@ public class Main extends Application implements EventHandler {
         itmMemrama = new MenuItem("taquimecanografo");
         itmMemrama.setOnAction(actionEvent -> opcionMenu(2));
 
+        itmRestaurante = new MenuItem("Restaurante");
+        itmRestaurante.setOnAction(actionEvent -> opcionMenu(3));
+
         itmTerminar= new MenuItem("hasta pronto");
         itmTerminar.setOnAction(actionEvent -> {System.exit(0);});
+
         //caragr el item memorama a l menu competencia1
         menCompetencia1.getItems().addAll(itmMemrama);
+        menCompetencia2.getItems().addAll(itmRestaurante);
         menSalir.getItems().add(itmTerminar);
 
 
@@ -104,7 +107,7 @@ public class Main extends Application implements EventHandler {
                 new taquimecanografo();
                 break;
             case 3:
-                //new CRUDProductos();
+                new Dashboard();
                 break;
             case 4:
                 //new PistaAtletismo();
