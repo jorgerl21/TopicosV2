@@ -61,7 +61,9 @@ public class TipoPlatilloDAO {
         }
         return listaTilpo;
     }
-    public void getTipo(){}
+    public ObservableList<TipoPlatilloDAO> getTipo(){
+        return null;
+    }
 
     @Override
     public String toString() {
