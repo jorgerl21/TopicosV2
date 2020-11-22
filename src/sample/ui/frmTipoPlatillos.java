@@ -51,17 +51,38 @@ public class frmTipoPlatillos extends Stage {
 
     private void Guardar() {
         objTipoPlatillo.setDesc_tipo(txtDescTipo.getText());
-        //objPlatillo.setPrecio(Float.parseFloat(txtPrecio.getText()));
-        //objPlatillo.setId_tipo(1);  // Valor fijo temporalmente
-        //objTipoPlatillo
 
-        if (objTipoPlatillo == null) {//proceso nuevo platillo
+        if (objTipoPlatillo.getId_tipo()>=1) { //actualiza tipo de platillo
+            objTipoPlatillo.upTipo();
+        } else {                    //agregar un nuevo tipo de platillo
             objTipoPlatillo.insTipo();
-        }else{
-            objTipoPlatillo.upTipo();//proceso actualizar platillo
         }
         tbvtipoPlatillos.setItems(objTipoPlatillo.getTipo());
         tbvtipoPlatillos.refresh();
         this.close();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//objPlatillo.setPrecio(Float.parseFloat(txtPrecio.getText()));
+//objPlatillo.setId_tipo(1);  // Valor fijo temporalmente
+//objTipoPlatillo
+
+        /*if (objTipoPlatillo == null) {//proceso nuevo platillo
+            objTipoPlatillo.insTipo();
+        }else{
+            objTipoPlatillo.upTipo();//proceso actualizar platillo
+        }*/

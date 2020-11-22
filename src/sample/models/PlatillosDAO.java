@@ -42,8 +42,7 @@ public class PlatillosDAO {
             e.printStackTrace();
         }
     }
-
-
+    
     public void delPlatillo(){
         try{
             String query = "DELETE FROM tbl_platillos WHERE id_platillo ="+id_platillo;

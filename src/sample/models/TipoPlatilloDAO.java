@@ -62,7 +62,25 @@ public class TipoPlatilloDAO {
         return listaTilpo;
     }
     public ObservableList<TipoPlatilloDAO> getTipo(){
-        return null;
+
+        ObservableList<TipoPlatilloDAO> listaTP = FXCollections.observableArrayList();
+        try{
+            TipoPlatilloDAO objTP;
+            String query = "select * from tbl_tipoplatillo order by id_tipo";
+            Statement stmt = Conexion.con.createStatement();
+            ResultSet res = stmt.executeQuery(query);
+            while(res.next()){
+                objTP = new TipoPlatilloDAO();
+                objTP.setId_tipo(res.getInt("id_tipo"));
+                objTP.setDesc_tipo(res.getString("desc_tipo"));
+
+                listaTP.add(objTP);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return listaTP;
     }
 
     @Override

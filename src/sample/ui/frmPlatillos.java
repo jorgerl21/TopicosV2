@@ -54,10 +54,10 @@ public class frmPlatillos extends Stage {
         objPlatillo.setPrecio(Float.parseFloat(txtPrecio.getText()));
         objPlatillo.setId_tipo(1);  // Valor fijo temporalmente
 
-        if (objPlatillo == null) {//proceso nuevo platillo
+        if (objPlatillo.getId_platillo() >= 1) { //nuevo platillo
+            objPlatillo.upPlatillo();
+        } else {                    //actualiza platillo
             objPlatillo.insPlatillo();
-        }else{
-            objPlatillo.upPlatillo();//proceso actualizar platillo
         }
         tbvplatillos.setItems(objPlatillo.getAllPlatillo());
         tbvplatillos.refresh();

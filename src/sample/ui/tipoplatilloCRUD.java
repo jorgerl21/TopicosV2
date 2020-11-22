@@ -37,6 +37,7 @@ public class tipoplatilloCRUD extends Stage {
         btnNuevotp.setOnAction(actionEvent -> {new frmTipoPlatillos(tbvtipoPlatillos, null);});
         vBox = new VBox();
         vBox.getChildren().addAll(tbvtipoPlatillos,btnNuevotp);
+        //vBox.getChildren().addAll(tbvtipoPlatillos,btnNuevotp);
         escena = new Scene(vBox, 300,250);
     }
 
