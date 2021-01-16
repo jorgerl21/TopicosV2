@@ -25,7 +25,7 @@ public class tipoplatilloCRUD extends Stage {
         objTPDAO = new TipoPlatilloDAO();
         CrearUI();
 
-        this.setTitle("administracion de platillos");
+        this.setTitle("administracion tipos de platillos");
         this.setScene(escena);
         this.show();
     }

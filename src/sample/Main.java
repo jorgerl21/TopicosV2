@@ -10,11 +10,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import sample.components.Hilo;
 import sample.models.Conexion;
+import sample.ui.*;
 import sample.ui.Dashboard;
-import sample.ui.memorama;
-import sample.ui.Dashboard;
-import sample.ui.taquimecanografo;
 
 public class Main extends Application implements EventHandler {
 //declara las variables del software
@@ -42,7 +41,12 @@ public class Main extends Application implements EventHandler {
         primaryStage.show();
 
         Conexion.crearConexion();
-        
+       /* new Hilo("sonic").start();
+        new Hilo("flash").start();
+        new Hilo("super man").start();
+        new Hilo("meteoro").start();
+        new Hilo("quick silver").start();*/
+        new Pista();
     }
 
     private void CrearUI() {

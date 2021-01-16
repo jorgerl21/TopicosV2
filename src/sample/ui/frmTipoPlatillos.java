@@ -12,7 +12,7 @@ import sample.models.TipoPlatilloDAO;
 
 public class frmTipoPlatillos extends Stage {
     private TextField txtDescTipo;
-    private ComboBox<TipoPlatilloDAO> cbxTipo;
+    //private ComboBox<TipoPlatilloDAO> cbxTipo;
     private Button btnGuardar;
     private VBox vBox;
     private Scene escena;
@@ -39,13 +39,13 @@ public class frmTipoPlatillos extends Stage {
         /*txtPrecio = new TextField();
         txtPrecio.setText(objPlatillo.getPrecio()+"");*/
 
-        cbxTipo = new ComboBox<>();
-        cbxTipo.setItems(new TipoPlatilloDAO().getAllTipo());
+        //cbxTipo = new ComboBox<>();
+        //cbxTipo.setItems(new TipoPlatilloDAO().getAllTipo());
 
         btnGuardar = new Button("Guardar Platillo");
         btnGuardar.setOnAction(actionEvent -> Guardar());
         vBox = new VBox();
-        vBox.getChildren().addAll(txtDescTipo,cbxTipo,btnGuardar);
+        vBox.getChildren().addAll(txtDescTipo,/*cbxTipo,*/btnGuardar);
         escena = new Scene(vBox, 250,250);
     }
 

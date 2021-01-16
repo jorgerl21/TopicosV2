@@ -1,5 +1,5 @@
 /*identifica que se carga un estilo predefinido a nuestro stage*/
-.root{-fx-background-image: url("https://images2.alphacoders.com/103/1039991.jpg"), url("/src/assets/logotec.png");
+.root{-fx-background-image: url("https://images3.alphacoders.com/719/719616.png"), url("/src/assets/logotec.png");
 -fx-background-repeat: no-repeat;
 -fx-background-size: cover, 250 300;
 -fx-background-position: center;
@@ -23,3 +23,4 @@
 .menu-item .label {
 -fx-text-fill: black;
 }
+/*https://images2.alphacoders.com/103/1039991.jpg*/
